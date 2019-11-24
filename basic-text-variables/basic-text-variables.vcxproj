@@ -70,6 +70,7 @@
       <EnableUAC>false</EnableUAC>
       <AdditionalDependencies>gdiplus.lib;obs.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(ProjectDir)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <PostBuildEvent>
       <Command>call "Post-Build.bat" $(TargetName) $(TargetDir) "C:\Program Files\obs-studio\obs-plugins\64bit\"</Command>
@@ -99,6 +100,7 @@
       <EnableUAC>false</EnableUAC>
       <AdditionalDependencies>gdiplus.lib;obs.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(ProjectDir)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <PostBuildEvent>
       <Command>call "Post-Build.bat" $(TargetName) $(TargetDir) "C:\Program Files\obs-studio\obs-plugins\64bit\"</Command>
@@ -109,11 +111,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="source\basic-text-variables.h" />
-    <ClInclude Include="source\TextSource.h" />
+    <ClInclude Include="source\TextMethods.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\basic-text-variables.cpp" />
-    <ClCompile Include="source\TextSource.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="data\locale\en-US.ini" />
