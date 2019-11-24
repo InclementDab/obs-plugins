@@ -62,7 +62,7 @@
       <PreprocessorDefinitions>_DEBUG;BASICTEXTVARIABLES_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(OBS)\libobs\;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(OBS)\libobs\;$(OBS);$(QT580);$(QT580)\QtCore\;$(QT580)\QtWidgets\;$(QT580)\QtGui\</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -90,7 +90,7 @@
       <PreprocessorDefinitions>NDEBUG;BASICTEXTVARIABLES_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(OBS)\libobs\;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(OBS)\libobs\;$(OBS);$(QT580);$(QT580)\QtCore\;$(QT580)\QtWidgets\;$(QT580)\QtGui\</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -110,10 +110,14 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="source\common.h" />
+    <ClInclude Include="source\OBSTextMethodEditor.h" />
     <ClInclude Include="source\basic-text-variables.h" />
     <ClInclude Include="source\TextMethods.h" />
+    <ClInclude Include="source\ui_variable-editor.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="source\OBSTextMethodEditor.cpp" />
     <ClCompile Include="source\basic-text-variables.cpp" />
   </ItemGroup>
   <ItemGroup>

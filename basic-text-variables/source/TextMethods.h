@@ -1,6 +1,13 @@
 #pragma once
 
-using text_function = std::wstring (*)(void* data);
+
+#include <iostream>
+#include <string>
+#include <regex>
+#include <sstream>
+
+
+using text_function = std::wstring(*)(void* data);
 struct text_method
 {
 	std::wstring syntax;
@@ -26,8 +33,9 @@ inline static std::wstring _SubGoal(void* data)
 
 static text_method text_method_list[] = {
 	{ std::wstring(L"SubCount"), _SubCount },
-    { std::wstring(L"SubGoal"), _SubGoal }
+	{ std::wstring(L"SubGoal"), _SubGoal }
 };
+
 
 
 

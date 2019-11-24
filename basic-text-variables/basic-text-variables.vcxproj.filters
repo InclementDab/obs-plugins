@@ -3,9 +3,13 @@
   <ItemGroup>
     <ClInclude Include="source\basic-text-variables.h" />
     <ClInclude Include="source\TextMethods.h" />
+    <ClInclude Include="source\OBSTextMethodEditor.h" />
+    <ClInclude Include="source\common.h" />
+    <ClInclude Include="source\ui_variable-editor.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\basic-text-variables.cpp" />
+    <ClCompile Include="source\OBSTextMethodEditor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="data\locale\en-US.ini" />

@@ -1,4 +1,6 @@
 #include "basic-text-variables.h"
+#include "TextMethods.h"
+#include "OBSTextMethodEditor.h"
 
 void get_defaults(obs_data_t* settings)
 {
@@ -137,11 +139,10 @@ bool hint_clicked(obs_properties_t* props, obs_property_t* property, void* data)
 {
 	blog(LOG_DEBUG, "hint_clicked");
 
-	const gs_init_data gs_data;
+	//text_method_list_editor method_list_editor();
 
-	obs_display_t* display = obs_display_create(&gs_data, 0);
-
-
+	VariableEditorUI variable_editor();
+	
 
 	return true;
 }
