@@ -3,9 +3,8 @@
 #include <obs.hpp>
 #include <Windows.h>
 #include <gdiplus.h>
-#include <memory>
 #include <string>
-#include <algorithm>
+#include <vector>
 #include <util/platform.h>
 #include "text-methods.h"
 
@@ -25,20 +24,29 @@
 #define D_COUNTER_ADD "Increment Counter"
 #define D_COUNTER_SUB "Decrement Counter"
 
-enum struct HAlign
-{
-	Left,
-	Center,
-	Right,
-};
 
-enum struct VAlign
-{
-	Top,
-	Center,
-	Bottom,
-};
 
+
+
+struct Alignment
+{
+	enum struct H
+	{
+		Left,
+		Middle,
+		Right,
+	} HAlign;
+	
+	enum struct V
+	{
+		Top,
+		Center,
+		Bottom,
+	} VAlign;
+
+	Alignment() : HAlign(H::Left), VAlign(V::Top) {}
+	Alignment(H h, V v) : HAlign(h), VAlign(v) {}
+};
 
 struct Counter
 {
@@ -52,32 +60,27 @@ public: // OBS Source Data
 	static const obs_source_type source_type = OBS_SOURCE_TYPE_INPUT;
 	static const uint32_t source_flags = OBS_SOURCE_VIDEO | OBS_SOURCE_CUSTOM_DRAW;
 
+	std::vector<obs_hotkey_id> hotkey_list = {};
 	obs_data_t* data;
 	obs_source_t* source;
-	obs_properties_t* source_properties;
 	uint32_t cx, cy;
 
-public:	// OBS Text Data
+private:	// Members that MUST be updated in Update Callback
 	HDC text_hdc;
-	
-	HAlign horizontal_align = HAlign::Left;
-	VAlign vertical_align = VAlign::Top;
+	Alignment alignment;
+	gs_texture_t* text_texture = nullptr;
 
 public: // OBS Texture Data
-	gs_texture_t* texture = nullptr;
 	
 
-	Counter(obs_data_t* _data, obs_source_t* _source) : data(_data), source(_source), source_properties(obs_properties_create()), text_hdc(CreateCompatibleDC(nullptr))
+	Counter(obs_data_t* _data, obs_source_t* _source) : data(_data), source(_source), text_hdc(CreateCompatibleDC(nullptr))
 	{
 		spdlog::warn("Counter");
 		cx = cy = 100;
 		text_method_list[0] = { std::wstring(L"Value"), counter_value };
 
-		obs_properties_add_font(source_properties, N_FONT, D_FONT);
-		obs_properties_add_text(source_properties, N_TEXT, D_TEXT, OBS_TEXT_DEFAULT);
-
-		obs_hotkey_register_frontend(N_COUNTER_ADD, D_COUNTER_ADD, key_increment_counter, this);
-		obs_hotkey_register_frontend(N_COUNTER_SUB, D_COUNTER_SUB, key_decrement_counter, this);
+		hotkey_list.push_back(obs_hotkey_register_source(source, N_COUNTER_ADD, D_COUNTER_ADD, key_increment_counter, this));
+		hotkey_list.push_back(obs_hotkey_register_source(source, N_COUNTER_SUB, D_COUNTER_SUB, key_decrement_counter, this));
 		
 		obs_source_update(source, data);
 	}
@@ -85,9 +88,13 @@ public: // OBS Texture Data
 	~Counter()
 	{
 		spdlog::warn("~Counter");
-		if (texture) {
+		for (obs_hotkey_id id : hotkey_list) {
+			obs_hotkey_unregister(id);
+		}
+		
+		if (text_texture) {
 			obs_enter_graphics();
-			gs_texture_destroy(texture);
+			gs_texture_destroy(text_texture);
 			obs_leave_graphics();
 		}
 	}
@@ -116,11 +123,18 @@ public: // OBS Texture Data
 	void Update(obs_data_t* data);
 	void Tick(float seconds);
 	void Render(gs_effect_t* effects);
+
+	gs_texture_t* GetTextTexture(std::wstring& wtext, const Gdiplus::Font& text_font);
 	
+	static Gdiplus::Font* GetTextFont(obs_data_t* update_data, const HDC& hdc);
 	static void GetDefaults(obs_data_t* settings);
-	
-	Gdiplus::StringFormat* GetTextFormat() const;
-	Gdiplus::Font* GetTextFont(obs_data_t* update_data) const;
-	void GetTextSize(const std::wstring& text, const Gdiplus::Font& font, const Gdiplus::StringFormat& format, Gdiplus::Size* text_size, Gdiplus::RectF* bounding_box) const;
+	static obs_properties_t* GetProperties();
+	static Gdiplus::StringFormat* GetTextFormat(const Alignment& alignment);
+	static void GetTextSize(const std::wstring& text,
+							const Gdiplus::Font& font,
+							const Gdiplus::StringFormat& format,
+							const HDC& text_hdc,
+							Gdiplus::Size* text_size,
+							Gdiplus::RectF* bounding_box);
 
 };
