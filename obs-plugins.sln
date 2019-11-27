@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29418.71
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "basic-text-variables", "basic-text-variables\basic-text-variables.vcxproj", "{35951A92-FC4B-480B-B3D3-82852B36D2C0}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "template", "template\template.vcxproj", "{C06FD416-5F01-45E0-8666-C32905B8F96B}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "text-variables", "text-variables\text-variables.vcxproj", "{2F56E843-4F1F-44AC-857C-A78DDCE45D2F}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "simple-counter", "simple-counter\simple-counter.vcxproj", "{DDB13BE8-85BF-45E6-BB5F-699E26D3F552}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,14 +15,18 @@ Global
 		Release|x64 = Release|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{35951A92-FC4B-480B-B3D3-82852B36D2C0}.Debug|x64.ActiveCfg = Debug|x64
-		{35951A92-FC4B-480B-B3D3-82852B36D2C0}.Debug|x64.Build.0 = Debug|x64
-		{35951A92-FC4B-480B-B3D3-82852B36D2C0}.Release|x64.ActiveCfg = Release|x64
-		{35951A92-FC4B-480B-B3D3-82852B36D2C0}.Release|x64.Build.0 = Release|x64
 		{C06FD416-5F01-45E0-8666-C32905B8F96B}.Debug|x64.ActiveCfg = Debug|x64
 		{C06FD416-5F01-45E0-8666-C32905B8F96B}.Debug|x64.Build.0 = Debug|x64
 		{C06FD416-5F01-45E0-8666-C32905B8F96B}.Release|x64.ActiveCfg = Release|x64
 		{C06FD416-5F01-45E0-8666-C32905B8F96B}.Release|x64.Build.0 = Release|x64
+		{2F56E843-4F1F-44AC-857C-A78DDCE45D2F}.Debug|x64.ActiveCfg = Debug|x64
+		{2F56E843-4F1F-44AC-857C-A78DDCE45D2F}.Debug|x64.Build.0 = Debug|x64
+		{2F56E843-4F1F-44AC-857C-A78DDCE45D2F}.Release|x64.ActiveCfg = Release|x64
+		{2F56E843-4F1F-44AC-857C-A78DDCE45D2F}.Release|x64.Build.0 = Release|x64
+		{DDB13BE8-85BF-45E6-BB5F-699E26D3F552}.Debug|x64.ActiveCfg = Debug|x64
+		{DDB13BE8-85BF-45E6-BB5F-699E26D3F552}.Debug|x64.Build.0 = Debug|x64
+		{DDB13BE8-85BF-45E6-BB5F-699E26D3F552}.Release|x64.ActiveCfg = Release|x64
+		{DDB13BE8-85BF-45E6-BB5F-699E26D3F552}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

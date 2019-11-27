@@ -1,12 +1,18 @@
 #pragma once
 
-#include <obs.h>
-#include <obs-module.h>
-#include <util/util.hpp>
-#include <util/platform.h>
-#include <iostream>
-#include <string>
-#include <memory>
+#include <QtCore/qglobal.h>
+
+
+#ifndef BUILD_STATIC
+# if defined(TEXTVARIABLES_LIB)
+#  define TEXTVARIABLES_EXPORT Q_DECL_EXPORT
+# else
+#  define TEXTVARIABLES_EXPORT Q_DECL_IMPORT
+# endif
+#else
+# define TEXTVARIABLES_EXPORT
+#endif
+
 
 
 #pragma region defines
@@ -113,8 +119,3 @@
 #define T_TRANSFORM_STARTCASE           T_("Transform.Startcase")
 
 #pragma endregion
-
-
-
-
-

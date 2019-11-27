@@ -1,7 +1,13 @@
-
-#include "basic-text-variables.h"
+#include "textvariables.h"
 #include "text-methods.h"
-
+#include <QMainWindow>
+#include <QAction>
+#include <UI/obs-frontend-api/obs-frontend-api.h>
+#include <util/util.hpp>
+#include <util/platform.h>
+#include <iostream>
+#include <string>
+#include <memory>
 
 void get_defaults(obs_data_t* settings)
 {
@@ -142,8 +148,8 @@ bool hint_clicked(obs_properties_t* props, obs_property_t* property, void* data)
 
 	//text_method_list_editor method_list_editor();
 
-	
-	
+
+
 
 
 	return true;
@@ -277,8 +283,7 @@ void TextSource::RemoveNewlinePadding(const Gdiplus::StringFormat& format, Gdipl
 	box.Height -= offset_cy;
 }
 
-void TextSource::CalculateTextSizes(const Gdiplus::StringFormat& format,
-									Gdiplus::RectF& bounding_box, SIZE& text_size)
+void TextSource::CalculateTextSizes(const Gdiplus::StringFormat& format, Gdiplus::RectF& bounding_box, SIZE& text_size)
 {
 	Gdiplus::RectF layout_box;
 	Gdiplus::RectF temp_box;
@@ -404,13 +409,13 @@ void TextSource::RenderText()
 
 	std::unique_ptr<uint8_t[]> bits(new uint8_t[size.cx * size.cy * 4]);
 	Gdiplus::Bitmap bitmap(size.cx, size.cy, 4 * size.cx, PixelFormat32bppARGB,
-				  bits.get());
+						   bits.get());
 
 	Gdiplus::Graphics graphics_bitmap(&bitmap);
 	Gdiplus::LinearGradientBrush brush(Gdiplus::RectF(0, 0, (float)size.cx, (float)size.cy),
 									   Gdiplus::Color(calc_color(color, opacity)),
 									   Gdiplus::Color(calc_color(color2, opacity2)),
-							  gradient_dir, 1);
+									   gradient_dir, 1);
 	DWORD full_bk_color = bk_color & 0xFFFFFF;
 
 	if (!text.empty() || use_extents)
@@ -507,7 +512,6 @@ const char* TextSource::GetMainString(const char* str)
 void TextSource::ReplaceVariables()
 {
 	for (text_method m : text_method_list) {
-		
 		text = std::regex_replace(text, m.get_regex(), m.func(this));
 	}
 }
@@ -655,7 +659,7 @@ void TextSource::Update(obs_data_t* s)
 	}
 	ReplaceVariables();
 	TransformText();
-	
+
 
 	use_outline = new_outline;
 	outline_color = new_o_color;
@@ -775,6 +779,5 @@ DWORD calc_color(uint32_t color, uint32_t opacity)
 {
 	return color & 0xFFFFFF | get_alpha_val(opacity);
 }
-
 
 

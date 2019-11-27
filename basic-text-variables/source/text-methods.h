@@ -1,11 +1,9 @@
 #pragma once
 
-
 #include <iostream>
 #include <string>
 #include <regex>
 #include <sstream>
-
 
 using text_function = std::wstring(*)(void* data);
 struct text_method
@@ -13,7 +11,7 @@ struct text_method
 	std::wstring syntax;
 	text_function func;
 
-	std::wregex get_regex()
+	std::wregex get_regex() const
 	{
 		std::wstringstream strstream;
 		strstream << L"\\$\\{(" << syntax << L")\\}";

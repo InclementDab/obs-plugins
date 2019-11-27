@@ -1,13 +1,36 @@
 #pragma once
 
-#include "common.h"
+#include "textvariables_global.h"
+#include <obs.h>
+#include <obs-module.h>
+#include "obs-internal.h"
+#include <util/threading.h>
+#include <util/util.hpp>
+#include <util/platform.h>
+#include <iostream>
+#include <string>
+#include <memory>
 #include <windows.h>
 #include <gdiplus.h>
-
 #include "OBSTextMethodEditor.h"
 
+#include <QApplication>
+#include <QMainWindow>
+#include <QAction>
+#include <QTimer>
+#include <UI/obs-frontend-api/obs-frontend-api.h>
+#include <UI/qt-display.hpp>
+#include <UI/qt-wrappers.hpp>
+
+OBS_DECLARE_MODULE()
+OBS_MODULE_USE_DEFAULT_LOCALE("text-variables", "en-US")
+MODULE_EXPORT const char inline* obs_module_description()
+{
+	return "OBS Custom Text Editor"; // 
+}
+
 static ULONG_PTR gdip_token = 0;
-static VariableEditorUI* variable_editor;
+VariableEditorUI* variable_editor;
 
 void get_defaults(obs_data_t* settings);
 obs_properties_t* get_properties(void* data);
@@ -157,15 +180,6 @@ static time_t get_modified_timestamp(const char* filename);
 static DWORD get_alpha_val(uint32_t opacity);
 static DWORD calc_color(uint32_t color, uint32_t opacity);
 
-void add_module_ui();
-
-OBS_DECLARE_MODULE()
-OBS_MODULE_USE_DEFAULT_LOCALE("basic-text-variables", "en-US")
-MODULE_EXPORT const char inline* obs_module_description()
-{
-	return "OBS Custom Text Editor"; // 
-}
-
 #define set_vis(var, val, show)                           \
 	do {                                              \
 		p = obs_properties_get(props, val);       \
@@ -226,11 +240,73 @@ static bool extents_modified(obs_properties_t* props, obs_property_t* p,
 
 #undef set_vis
 
+
+
+inline void QtExecSync(void (*func)(void*), void* const data)
+{
+	if (QThread::currentThread() == qApp->thread()) {
+		func(data);
+	}
+	else {
+		os_event_t* completeEvent;
+
+		os_event_init(&completeEvent, OS_EVENT_TYPE_AUTO);
+
+		QTimer* t = new QTimer();
+		t->moveToThread(qApp->thread());
+		t->setSingleShot(true);
+		QObject::connect(t, &QTimer::timeout, [=]() {
+			t->deleteLater();
+
+			func(data);
+
+			os_event_signal(completeEvent);
+		});
+		QMetaObject::invokeMethod(t, "start", Qt::QueuedConnection,
+								  Q_ARG(int, 0));
+
+		QApplication::sendPostedEvents();
+
+		os_event_wait(completeEvent);
+		os_event_destroy(completeEvent);
+	}
+}
+
+inline void QtExecSync(std::function<void()> task)
+{
+	struct local_context
+	{
+		std::function<void()> task;
+	};
+
+	auto context = new local_context();
+	context->task = task;
+
+	QtExecSync([](void* data) {
+		local_context* context = (local_context*)data;
+		context->task();
+		delete context;
+	}, context);
+}
+
+
+inline void add_module_ui()
+{
+
+	obs_frontend_push_ui_translation(obs_module_get_string);
+	QAction* action = (QAction*)obs_frontend_add_tools_menu_qaction(obs_module_text("TextVariables"));
+	QMainWindow* window = (QMainWindow*)obs_frontend_get_main_window();
+	variable_editor = new VariableEditorUI(window);
+	obs_frontend_pop_ui_translation();
+
+	auto cb = []() { variable_editor->ShowHideDialog(); };
+
+	action->connect(action, &QAction::triggered, cb);
+}
+
+
 inline bool obs_module_load()
 {
-	//blog(LOG_INFO, "Loading InclementDeath");
-	//add_module_ui();
-
 
 	obs_source_info si = {};
 	si.id = "text_variables";
@@ -264,7 +340,17 @@ inline bool obs_module_load()
 
 	obs_register_source(&si);
 	const Gdiplus::GdiplusStartupInput gdip_input;
-	Gdiplus::GdiplusStartup(&gdip_token, &gdip_input, nullptr);
+	GdiplusStartup(&gdip_token, &gdip_input, nullptr);
+
+	
+	// todo run add-module-ui in this callback
+	obs_frontend_add_event_callback(obs_frontend_event::OBS_FRONTEND_EVENT_FINISHED_LOADING, nullptr);
+	std::function<void()> mod_ui = add_module_ui;
+	QtExecSync(mod_ui);
+
+	//QEvent* loaded_event = new QEvent(QEvent::Type::ApplicationActivated);
+	//
+	//QCoreApplication::notify(QCoreApplication::instance(), loaded_event);
 
 	return true;
 }
@@ -274,3 +360,4 @@ inline void obs_module_unload()
 	blog(LOG_INFO, "Unloading {}", obs_module_text("PluginName"));
 	Gdiplus::GdiplusShutdown(gdip_token);
 }
+

@@ -1,19 +1,26 @@
 
 #include "OBSTextMethodEditor.h"
+#include <util/util.hpp>
+#include <obs-module.h>
+#include <libobs/util/platform.h>
 
-//Ui_VariableEditor
-VariableEditorUI::VariableEditorUI(QWidget* parent) : QDialog(parent), properties_view(nullptr)
+
+VariableEditorUI::VariableEditorUI(QWidget* parent)
+			: QDialog(parent), properties_view(nullptr), ui(new Ui_Dialog)
 {
-	//ui->setupUi(this);
-
+	ui->setupUi(this);
 	setSizeGripEnabled(true);
 	setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 }
 
 void VariableEditorUI::ShowHideDialog()
 {
+	if (!ui) {
+		ui = std::make_unique<Ui_Dialog>();
+		ui->setupUi(this);
+	}
+	
 	SetupPropertiesView();
-
 	setVisible(!isVisible());
 }
 

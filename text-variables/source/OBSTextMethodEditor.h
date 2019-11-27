@@ -1,14 +1,10 @@
 #pragma once
 
-#include "common.h"
-#include <QObject>
+
+#include <memory>
 #include <QDialog>
 
-#include <QWidget>
-#include <QWindow>
-#include <QScreen>
-#include <QResizeEvent>
-#include <QShowEvent>
+#include <ui_output.h>
 #include <UI/properties-view.hpp>
 
 
@@ -18,14 +14,15 @@ struct VariableEditorUI : QDialog
 
 private:
 	OBSPropertiesView* properties_view;
-
+	
 public slots:
 	void PropertiesChanged();
 
 public:
 
-	std::unique_ptr<void*> ui;
+	std::unique_ptr<Ui_Dialog> ui;
 	VariableEditorUI(QWidget* parent = nullptr);
+	~VariableEditorUI() = default;
 
 	void ShowHideDialog();
 	OBSData LoadSettings();
