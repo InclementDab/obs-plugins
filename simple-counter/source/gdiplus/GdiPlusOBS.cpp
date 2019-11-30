@@ -13,12 +13,23 @@ gs_texture_t* GdiPlusOBS::GetTextTexture(std::wstring& wtext, obs_data_t* update
 	// Font
 	obs_data_t* font_data = obs_data_get_obj(update_data, N_FONT);
 	std::wstring font_name = ToWide(obs_data_get_string(font_data, "face"));
-	long long font_size = obs_data_get_int(font_data, "size");
-	int64_t font_flags = obs_data_get_int(font_data, "flags");
+	auto font_size = obs_data_get_int(font_data, "size");
+	auto font_flags = obs_data_get_int(font_data, "flags");
 	obs_data_release(font_data);
 
-	uint32_t text_color = (uint32_t)obs_data_get_int(update_data, N_COLOR);
-	int text_opacity = obs_data_get_int(update_data, N_OPACITY);
+	auto text_color = obs_data_get_int(update_data, N_FILL_COLOR);
+	auto text_opacity = obs_data_get_int(update_data, N_FILL_OPACITY);
+
+	auto outline_enable = obs_data_get_bool(update_data, N_OUTLINE);
+	auto outline_color = obs_data_get_int(update_data, N_OUTLINE_COLOR);
+	auto outline_thickness = obs_data_get_double(update_data, N_OUTLINE_THICKNESS);
+	auto outline_opacity = obs_data_get_int(update_data, N_OUTLINE_COLOR);
+
+	auto shadow_color = obs_data_get_int(update_data, N_SHADOW_COLOR);
+	auto shadow_opacity = obs_data_get_int(update_data, N_SHADOW_COLOR);
+
+	Gdiplus::SolidBrush text_brush(GetColorValue(text_color, text_opacity));
+	Gdiplus::SolidBrush outline_brush(GetColorValue(outline_color, outline_opacity));
 	
 #pragma endregion
 	
@@ -105,8 +116,9 @@ gs_texture_t* GdiPlusOBS::GetTextTexture(std::wstring& wtext, obs_data_t* update
 
 	std::unique_ptr<uint8_t[]> bits(new uint8_t[text_size->Height * text_size->Width * 4]);
 	Gdiplus::Bitmap bitmap(text_size->Width, text_size->Height, 4 * text_size->Width, PixelFormat32bppARGB, bits.get());
-	Gdiplus::Graphics graphics_bitmap(&bitmap);	
-	Gdiplus::SolidBrush brush(GetColorValue(text_color, text_opacity));
+	Gdiplus::Graphics graphics_bitmap(&bitmap);
+	
+	
 	
 	
 #pragma region DrawToGraphics
@@ -121,12 +133,41 @@ gs_texture_t* GdiPlusOBS::GetTextTexture(std::wstring& wtext, obs_data_t* update
 		return nullptr;
 	}
 
-	status = graphics_bitmap.DrawString(wtest, wcslen(wtest), text_font, bounding_box, text_format, &brush);
+	status = graphics_bitmap.DrawString(wtest, wcslen(wtest), text_font, bounding_box, text_format, &text_brush);
 	if (status) {
 		spdlog::error("Error in DrawString: {}", status);
 		return nullptr;
 	}
 
+	//outline text
+	if (outline_enable) {
+		
+		Gdiplus::GraphicsPath graphics_path;
+		Gdiplus::FontFamily font_family;
+		text_font->GetFamily(&font_family);
+		
+		Gdiplus::Pen outline_pen(GetColorValue(outline_color, outline_opacity));
+		outline_pen.SetLineJoin(Gdiplus::LineJoinRound);
+
+		status = graphics_path.AddString(wtest, wcslen(wtest), &font_family, text_font->GetStyle(), text_font->GetSize(), bounding_box, text_format);
+		if (status) {
+			spdlog::error("Error in AddString: {}", status);
+			return nullptr;
+		}
+
+		status = graphics_bitmap.DrawPath(&outline_pen, &graphics_path);
+		if (status) {
+			spdlog::error("Error in DrawPath: {}", status);
+			return nullptr;
+		}
+
+		status = graphics_bitmap.FillPath(&outline_brush, &graphics_path);
+		if (status) {
+			spdlog::error("Error in FillPath: {}", status);
+			return nullptr;
+		}
+	}
+	
 	obs_enter_graphics();
 
 	if (!texture) {

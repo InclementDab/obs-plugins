@@ -9,8 +9,24 @@
 
 #define N_TEXT "text"
 #define N_FONT "font"
-#define N_COLOR "color"
-#define N_OPACITY "opacity"
+
+#define N_FILL_COLOR "fill_color"
+#define N_FILL_OPACITY "fill_opacity"
+
+#define N_OUTLINE_COLOR "outline_color"
+#define N_OUTLINE_OPACITY "outline_opacity"
+#define N_OUTLINE_THICKNESS "outline_thickness"
+
+#define N_SHADOW_COLOR "shadow_color"
+#define N_SHADOW_OPACITY "shadow_opacity"
+#define N_SHADOW_DISTANCE "shadow_distance"
+#define N_SHADOW_SIZE "shadow_size"
+
+
+#define N_STYLE "style"
+#define N_OUTLINE "outline"
+#define N_SHADOW "shadow"
+
 #define N_VARIABLES_BTN "variables"
 
 static const char* ToNarrow(const wchar_t* wcs)
@@ -48,12 +64,8 @@ static T1 Clamp(const T1& num, const T2& min, const T2& max)
 
 static Gdiplus::Color GetColorValue(uint32_t color, uint32_t opacity)
 {
-
 	uint32_t _color = (color & 0xFF) << 16 | color & 0xFF00 | (color & 0xFF0000) >> 16;
 	auto rgba = _color & 0xFFFFFF | (opacity * 255 / 100 & 0xFF) << 24;
-	
-	
-	
 	Gdiplus::Color c(rgba);
 	return c;
 }

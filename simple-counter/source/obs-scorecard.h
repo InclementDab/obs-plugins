@@ -71,36 +71,9 @@ public:
 		return true;
 	}
 
-	static void DefaultData(obs_data_t* settings)
-	{
-		obs_data_t* font = obs_data_create();
-		obs_data_set_default_string(font, "face", "Arial");
-		obs_data_set_default_int(font, "size", 36);
+	static void DefaultData(obs_data_t* settings);
 
-		obs_data_set_default_obj(settings, N_FONT, font);
-		obs_data_set_default_string(settings, N_TEXT, "Record: ${Wins}W / ${Losses}L");
-		obs_data_set_default_int(settings, N_COLOR, 0xFFFFFF);
-		obs_data_set_default_int(settings, N_OPACITY, 100);
-
-
-		obs_data_release(font);
-	}
-	
-	static obs_properties_t* GetProperties(void* data)
-	{
-		auto source_properties = obs_properties_create();
-		obs_properties_t* prop_list = obs_properties_create();
-
-		obs_properties_add_font(source_properties, N_FONT, "Font");
-		obs_properties_add_text(source_properties, N_TEXT, "Text", OBS_TEXT_MULTILINE);
-
-		obs_properties_add_button(source_properties, N_VARIABLES_BTN, "Variables", variable_list_button);
-
-		obs_properties_add_color(source_properties, N_COLOR, "Fill Color");
-		obs_properties_add_int_slider(source_properties, N_OPACITY, "Fill Opacity", 0, 100, 1);
-
-		return source_properties;
-	}
+	static obs_properties_t* GetProperties(void* data);
 
 	void Update(obs_data_t* data);
 	void Tick(float seconds);
