@@ -1,22 +1,30 @@
 
 #include "GdiPlusOBS.h"
 
-gs_texture_t* GdiPlusOBS::GetTextTexture(std::wstring& wtext, obs_data_t* font_data, Gdiplus::Size* text_size, const Alignment& alignment)
+gs_texture_t* GdiPlusOBS::GetTextTexture(std::wstring& wtext, obs_data_t* update_data, Gdiplus::Size* text_size, const Alignment& alignment)
 {
 	spdlog::trace("GetTextTexture");
 
-	Gdiplus::Font* text_font = nullptr;
 	Gdiplus::Graphics graphics(text_hdc);
 	Gdiplus::RectF bounding_box;
-	
-#pragma region GetFont
-	
-	spdlog::trace("GetTextFont");
+
+#pragma region OBSGetData
+
+	// Font
+	obs_data_t* font_data = obs_data_get_obj(update_data, N_FONT);
 	std::wstring font_name = ToWide(obs_data_get_string(font_data, "face"));
 	long long font_size = obs_data_get_int(font_data, "size");
 	int64_t font_flags = obs_data_get_int(font_data, "flags");
 	obs_data_release(font_data);
 
+	uint32_t text_color = (uint32_t)obs_data_get_int(update_data, N_COLOR);
+	int text_opacity = obs_data_get_int(update_data, N_OPACITY);
+	
+#pragma endregion
+	
+#pragma region GetFont
+	
+	spdlog::trace("GetTextFont");
 	LOGFONT* lf = new LOGFONT();
 	std::copy(font_name.begin(), font_name.end(), lf->lfFaceName);
 	lf->lfHeight = font_size;
@@ -27,7 +35,7 @@ gs_texture_t* GdiPlusOBS::GetTextTexture(std::wstring& wtext, obs_data_t* font_d
 	lf->lfQuality = ANTIALIASED_QUALITY;
 	lf->lfCharSet = DEFAULT_CHARSET;
 
-	text_font = new Gdiplus::Font(text_hdc, lf);
+	auto text_font = new Gdiplus::Font(text_hdc, lf);
 #pragma endregion
 	
 #pragma region StringFormat
@@ -95,11 +103,13 @@ gs_texture_t* GdiPlusOBS::GetTextTexture(std::wstring& wtext, obs_data_t* font_d
 
 #pragma endregion
 
-
 	std::unique_ptr<uint8_t[]> bits(new uint8_t[text_size->Height * text_size->Width * 4]);
 	Gdiplus::Bitmap bitmap(text_size->Width, text_size->Height, 4 * text_size->Width, PixelFormat32bppARGB, bits.get());
-	Gdiplus::Graphics graphics_bitmap(&bitmap);
-	Gdiplus::SolidBrush brush(Gdiplus::Color::White);
+	Gdiplus::Graphics graphics_bitmap(&bitmap);	
+	Gdiplus::SolidBrush brush(GetColorValue(text_color, text_opacity));
+	
+	
+#pragma region DrawToGraphics
 
 	graphics_bitmap.SetTextRenderingHint(Gdiplus::TextRenderingHintAntiAlias);
 	graphics_bitmap.SetCompositingMode(Gdiplus::CompositingModeSourceOver);
@@ -128,7 +138,8 @@ gs_texture_t* GdiPlusOBS::GetTextTexture(std::wstring& wtext, obs_data_t* font_d
 	}
 
 	obs_leave_graphics();
-
+#pragma endregion
+	
 	delete text_font;
 	return texture;
 }

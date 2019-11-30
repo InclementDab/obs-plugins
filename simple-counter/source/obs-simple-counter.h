@@ -20,13 +20,6 @@
 #define N_COUNTER_ADD "add-counter"
 #define N_COUNTER_SUB "sub-counter"
 
-#define D_TEXT "Text"
-#define D_FONT "Font"
-#define D_COUNTER_ADD "Increment Counter"
-#define D_COUNTER_SUB "Decrement Counter"
-
-
-
 struct SimpleCounter
 {
 

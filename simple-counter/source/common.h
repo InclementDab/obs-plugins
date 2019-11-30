@@ -5,6 +5,13 @@
 #include <string>
 #include <regex>
 #include <utility>
+#include <spdlog/spdlog.h>
+
+#define N_TEXT "text"
+#define N_FONT "font"
+#define N_COLOR "color"
+#define N_OPACITY "opacity"
+#define N_VARIABLES_BTN "variables"
 
 static const char* ToNarrow(const wchar_t* wcs)
 {
@@ -39,6 +46,17 @@ static T1 Clamp(const T1& num, const T2& min, const T2& max)
 	return (num < min) ? min : (max < num) ? max : num;
 }
 
+static Gdiplus::Color GetColorValue(uint32_t color, uint32_t opacity)
+{
+
+	uint32_t _color = (color & 0xFF) << 16 | color & 0xFF00 | (color & 0xFF0000) >> 16;
+	auto rgba = _color & 0xFFFFFF | (opacity * 255 / 100 & 0xFF) << 24;
+	
+	
+	
+	Gdiplus::Color c(rgba);
+	return c;
+}
 
 using text_function = std::wstring(*)(void* data);
 struct text_method

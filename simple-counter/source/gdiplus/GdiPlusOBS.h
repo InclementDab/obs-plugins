@@ -35,7 +35,6 @@ struct Alignment
 
 struct GdiPlusOBS
 {
-
 	HDC text_hdc = CreateCompatibleDC(nullptr);	
-	gs_texture_t* GetTextTexture(std::wstring& wtext, obs_data_t* font_data, Gdiplus::Size* text_size, const Alignment& alignment);
+	gs_texture_t* GetTextTexture(std::wstring& wtext, obs_data_t* update_data, Gdiplus::Size* text_size, const Alignment& alignment);
 };

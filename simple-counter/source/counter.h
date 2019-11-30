@@ -10,7 +10,7 @@ public:
 	obs_data_t* settings;
 
 public:
-	int value = 0; // todo template this?
+	int value = 0;
 	const char* name;
 	const char* id;
 
@@ -20,14 +20,12 @@ public:
 	{
 		spdlog::info("Creating Counter {}", name);
 
-		auto increment_func = [](void* data, obs_hotkey_id id, obs_hotkey_t* hotkey, bool pressed)
-		{
+		auto increment_func = [](void* data, obs_hotkey_id id, obs_hotkey_t* hotkey, bool pressed) {
 			Counter* c = reinterpret_cast<Counter*>(data);
 			if (pressed) c->value++;
 			obs_source_update(c->source, c->settings);
 		};
-		auto decrement_func = [](void* data, obs_hotkey_id id, obs_hotkey_t* hotkey, bool pressed)
-		{
+		auto decrement_func = [](void* data, obs_hotkey_id id, obs_hotkey_t* hotkey, bool pressed) {
 			Counter* c = reinterpret_cast<Counter*>(data);
 			if (pressed) c->value--;
 			obs_source_update(c->source, c->settings);
@@ -48,8 +46,7 @@ public:
 
 	explicit operator text_method() const
 	{
-		return text_method(name, [](void* data)
-		{
+		return text_method(name, [](void* data) {
 			return std::to_wstring(reinterpret_cast<Counter*>(data)->value);
 		});
 	}
@@ -72,12 +69,10 @@ public:
 	{
 		return value;
 	}
-	
+
 	bool operator==(const Counter& compare) const
 	{
-		return  (value == compare.value) &&
-				(name == compare.name) &&
-				(id == compare.id);
+		return value == compare.value && name == compare.name && id == compare.id;
 	}
 
 	Counter& operator=(const Counter&) = default;

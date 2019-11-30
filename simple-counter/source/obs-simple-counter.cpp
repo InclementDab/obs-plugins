@@ -5,8 +5,8 @@ obs_properties_t* SimpleCounter::GetProperties(void* data)
 {
 	auto source_properties = obs_properties_create();
 
-	obs_properties_add_font(source_properties, N_FONT, D_FONT);
-	obs_properties_add_text(source_properties, N_TEXT, D_TEXT, OBS_TEXT_DEFAULT);
+	obs_properties_add_font(source_properties, N_FONT, "Font");
+	obs_properties_add_text(source_properties, N_TEXT, "Text", OBS_TEXT_DEFAULT);
 
 	return source_properties;
 }
