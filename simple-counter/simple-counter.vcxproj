@@ -63,6 +63,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <AdditionalIncludeDirectories>$(SPDLOG)\;$(Qt_INCLUDEPATH_);$(OBS);$(OBS)\libobs\;.\;.\source\forms;$(QTLATEST_X64)\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/D "DEBUG" %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -89,7 +90,8 @@
       <PreprocessorDefinitions>NDEBUG;BASICTEXTVARIABLES_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(OBS)\libobs\;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SPDLOG)\;$(Qt_INCLUDEPATH_);$(OBS);$(OBS)\libobs\;.\;.\source\forms;$(QTLATEST_X64)\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/D "RELEASE" %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -97,7 +99,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
-      <AdditionalDependencies>gdiplus.lib;obs.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>gdiplus.lib;$(OBS)\build\UI\frontend-plugins\frontend-tools\Debug\frontend-tools.lib;$(OBS)\build\UI\obs-frontend-api\Debug\obs-frontend-api.lib;$(OBS)\build\libobs\Debug\obs.lib;$(OBS)\build\deps\w32-pthreads\Debug\w32-pthreads.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(ProjectDir)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
@@ -109,15 +111,21 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="source\counter.h" />
-    <ClInclude Include="source\text-methods.h" />
-    <ClInclude Include="source\utils.h" />
+    <ClInclude Include="source\obs-simple-counter.h" />
+    <ClInclude Include="source\gdiplus\GdiPlusOBS.h" />
+    <ClInclude Include="source\obs-scorecard.h" />
+    <ClInclude Include="source\common.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="source\counter.cpp" />
+    <ClCompile Include="source\obs-simple-counter.cpp" />
+    <ClCompile Include="source\gdiplus\GdiPlusOBS.cpp" />
     <ClCompile Include="source\pluginmain.cpp" />
+    <ClCompile Include="source\obs-scorecard.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="data\locale\en-US.ini" />
+    <None Include="Post-Build.bat" />
+    <None Include="source\data\locale\en-US.ini" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
