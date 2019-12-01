@@ -17,38 +17,29 @@
 
 struct Scorecard : GdiPlusOBS
 {
-
+private: // Callbacks
+	
+	
 public: // Generic Data
 
 	Counter wins, draws, losses;
-	std::vector<text_method> text_method_list = {};
 
 public: // OBS Source Data
 
 	obs_data_t* data;
 	obs_source_t* source;
 	Gdiplus::Size* text_size;
-
-
-private:	// Members that MUST be updated in Update Callback
-
 	Alignment alignment;
-	gs_texture_t* text_texture = nullptr;
 
 public:
 
-	Scorecard(obs_data_t* _data, obs_source_t* _source) : 
+	Scorecard(obs_data_t* _data, obs_source_t* _source) :
 		wins(_source, _data, "wins", "Wins"),
 		draws(_source, _data,"draws", "Draws"),
 		losses(_source, _data, "losses", "Losses"),
 		data(_data), source(_source), text_size(new Gdiplus::Size(0,0))
 	{
-		spdlog::warn("Scorecard");
-
-		text_method_list.push_back(wins.get_text_method());
-		text_method_list.push_back(draws.get_text_method());
-		text_method_list.push_back(losses.get_text_method());
-		
+		spdlog::warn("Scorecard");		
 		obs_source_update(source, data);
 	}
 

@@ -4,8 +4,9 @@
 #include <gdiplus.h>
 #include "source/common.h"
 #include <memory>
-
+#include <algorithm>
 #include <spdlog/spdlog.h>
+#include <string>
 
 #define MIN_SIZE 2
 #define MAX_SIZE 16384
@@ -35,6 +36,21 @@ struct Alignment
 
 struct GdiPlusOBS
 {
-	HDC text_hdc = CreateCompatibleDC(nullptr);	
-	gs_texture_t* GetTextTexture(std::wstring& wtext, obs_data_t* update_data, Gdiplus::Size* text_size, const Alignment& alignment);
+protected:
+	HDC text_hdc = CreateCompatibleDC(nullptr);
+	gs_texture_t* text_texture = nullptr;
+		
+public:
+	Gdiplus::Font* text_font = new Gdiplus::Font(text_hdc);
+	
+	static void  CheckStatus(Gdiplus::Status status, const char* const source = "Generic")
+	{
+		if (status) {
+			spdlog::error("Error in {}: {}", source, status);
+			OutputDebugString(L"Error In CheckStatus");
+			OutputDebugString((LPCWSTR)status);
+		}
+	}
+
+	Gdiplus::Size UpdateTextTexture(std::wstring& wtext, obs_data_t* update_data, const Alignment& alignment);
 };

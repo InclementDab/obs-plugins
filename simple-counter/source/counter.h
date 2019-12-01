@@ -58,11 +58,11 @@ public:
 		});
 	}
 
-	std::wstring text_replace(std::wstring wtext)
+	void text_replace(std::wstring* wtext)
 	{
 		std::wstring syntax = ToWide(name);
 		std::wstring regex = L"\\$\\{(" + syntax + L")\\}";
-		return std::regex_replace(wtext, std::wregex(regex), std::to_wstring(value));
+		*wtext = std::regex_replace(*wtext, std::wregex(regex), std::to_wstring(value));
 	}
 
 	explicit operator int() const

@@ -13,19 +13,25 @@
 #define N_FILL_COLOR "fill_color"
 #define N_FILL_OPACITY "fill_opacity"
 
+#define N_OUTLINE "outline"
+#define N_OUTLINE_GROUP "outline_group"
 #define N_OUTLINE_COLOR "outline_color"
 #define N_OUTLINE_OPACITY "outline_opacity"
 #define N_OUTLINE_THICKNESS "outline_thickness"
 
+
+
+#define N_SHADOW "shadow"
+#define N_SHADOW_GROUP "shadow_group"
+
+#define N_SHADOW_ROTATION "shadow_rotation"
+#define N_SHADOW_SIZE "shadow_size"
 #define N_SHADOW_COLOR "shadow_color"
 #define N_SHADOW_OPACITY "shadow_opacity"
 #define N_SHADOW_DISTANCE "shadow_distance"
-#define N_SHADOW_SIZE "shadow_size"
 
 
 #define N_STYLE "style"
-#define N_OUTLINE "outline"
-#define N_SHADOW "shadow"
 
 #define N_VARIABLES_BTN "variables"
 

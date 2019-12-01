@@ -13,7 +13,7 @@ OBS_DECLARE_MODULE()
 bool obs_module_load()
 {
 #ifdef DEBUG
-	AllocConsole();
+	//AllocConsole();
 	spdlog::set_level(spdlog::level::debug);
 #elif RELEASE
 	spdlog::set_level(spdlog::level::warn);
