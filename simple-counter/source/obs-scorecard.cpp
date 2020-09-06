@@ -112,6 +112,7 @@ void Scorecard::Tick(float seconds)
 
 void Scorecard::Render(gs_effect_t* effects)
 {
+	time_point = std::chrono::high_resolution_clock::now();
 	if (!text_texture) return;
 
 	gs_effect_t* effect = obs_get_base_effect(OBS_EFFECT_DEFAULT);

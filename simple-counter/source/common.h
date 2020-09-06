@@ -1,11 +1,13 @@
 #pragma once
 
+#include <obs-module.h>
+#include <Windows.h>
+#include <gdiplus.h>
 #include <obs-internal.h>
 #include <util/platform.h>
 #include <string>
 #include <regex>
 #include <utility>
-#include <spdlog/spdlog.h>
 
 #define N_TEXT "text"
 #define N_FONT "font"
@@ -32,8 +34,17 @@
 
 
 #define N_STYLE "style"
-
 #define N_VARIABLES_BTN "variables"
+
+
+inline const char* Str(const char* lookup)
+{
+	return obs_module_text(lookup);
+	//	return App()->GetString(lookup);
+}
+
+#define QTStr(lookupVal) QString::fromUtf8(lookupVal) //todo for locale change this to Str(lookupVal)
+
 
 static const char* ToNarrow(const wchar_t* wcs)
 {

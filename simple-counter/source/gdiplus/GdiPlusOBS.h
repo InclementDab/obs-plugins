@@ -2,9 +2,7 @@
 #include <obs.hpp>
 #include <Windows.h>
 #include <gdiplus.h>
-#include "source/common.h"
-#include <memory>
-#include <algorithm>
+#include "common.h"
 #include <spdlog/spdlog.h>
 #include <string>
 
@@ -43,11 +41,11 @@ protected:
 public:
 	Gdiplus::Font* text_font = new Gdiplus::Font(text_hdc);
 	
-	static void  CheckStatus(Gdiplus::Status status, const char* const source = "Generic")
+	static void CheckStatus(Gdiplus::Status status, const char* const source = "Generic")
 	{
 		if (status) {
 			spdlog::error("Error in {}: {}", source, status);
-			OutputDebugString(L"Error In CheckStatus");
+			OutputDebugString((LPCWSTR)L"Error In CheckStatus");
 			OutputDebugString((LPCWSTR)status);
 		}
 	}

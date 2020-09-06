@@ -16,6 +16,7 @@
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>basictextvariables</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <Keyword>Qt4VSv1.0</Keyword>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
@@ -59,21 +60,23 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;BASICTEXTVARIABLES_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;BASICTEXTVARIABLES_EXPORTS;_WINDOWS;_USRDLL;QT_GUI_LIB;QT_XMLPATTERNS_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SPDLOG)\;$(Qt_INCLUDEPATH_);$(OBS);$(OBS)\libobs\;.\;.\source\forms;$(QTLATEST_X64)\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(JSON11);$(OBS);$(OBS)\libobs\;$(OBS)\build\UI\;$(OBS)\UI\obs-frontend-api;$(OBS)\plugins\obs-browser\panel;$(CURL);$(CURLPP);$(SPDLOG)\;$(QTDIR)\include\QtXml;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtWidgets;$(QTDIR)\include\QtSvg;$(QTDIR)\include\QtCore;$(QTDIR)\include\;.\source;.\source\window;.\source\ui;.\source\ui\forms;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtXmlPatterns;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>/D "DEBUG" %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
-      <AdditionalDependencies>gdiplus.lib;$(OBS)\build\UI\frontend-plugins\frontend-tools\Debug\frontend-tools.lib;$(OBS)\build\UI\obs-frontend-api\Debug\obs-frontend-api.lib;$(OBS)\build\libobs\Debug\obs.lib;$(OBS)\build\deps\w32-pthreads\Debug\w32-pthreads.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(ProjectDir)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>gdiplus.lib;E:\Dev\sdk\curl-7.67.0\build\lib\Release\libcurl_imp.lib;$(OBS)\build\UI\Debug\obs64.lib;$(OBS)\build\UI\obs.dir\Debug\obs64.lib;$(OBS)\build\UI\frontend-plugins\frontend-tools\Debug\frontend-tools.lib;$(OBS)\build\UI\obs-frontend-api\Debug\obs-frontend-api.lib;$(OBS)\build\libobs\Debug\obs.lib;$(OBS)\build\deps\w32-pthreads\Debug\w32-pthreads.lib;$(OBS)\build\plugins\rtmp-services\Debug\rtmp-services.lib;$(OBS)\build\deps\glad\Debug\obsglad.lib;Qt5Core.lib;Qt5Cored.lib;Qt5Widgets.lib;Qt5Gui.lib;Qt5Xml.lib;Qt5Svg.lib;Qt5Guid.lib;Qt5XmlPatternsd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(QTDIR)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <EntryPointSymbol>
+      </EntryPointSymbol>
     </Link>
     <PostBuildEvent>
-      <Command>call "Post-Build.bat" $(TargetName) $(TargetDir) "C:\Program Files\obs-studio\obs-plugins\64bit\"</Command>
+      <Command>call "Post-Build.bat" $(TargetName) $(TargetDir) "E:\Dev\sdk\obs-studio\build\Debug\obs-plugins\64bit"</Command>
     </PostBuildEvent>
     <PostBuildEvent>
       <Message>Copy to obs-studio plugins...</Message>
@@ -87,10 +90,10 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;BASICTEXTVARIABLES_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;BASICTEXTVARIABLES_EXPORTS;_WINDOWS;_USRDLL;QT_GUI_LIB;QT_XMLPATTERNS_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SPDLOG)\;$(Qt_INCLUDEPATH_);$(OBS);$(OBS)\libobs\;.\;.\source\forms;$(QTLATEST_X64)\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SPDLOG)\;$(Qt_INCLUDEPATH_);$(OBS);$(OBS)\libobs\;.\;.\source\forms;$(QTDIR)\include\;$(CURL);$(CURLPP);$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtXmlPatterns;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>/D "RELEASE" %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
@@ -99,7 +102,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
-      <AdditionalDependencies>gdiplus.lib;$(OBS)\build\UI\frontend-plugins\frontend-tools\Debug\frontend-tools.lib;$(OBS)\build\UI\obs-frontend-api\Debug\obs-frontend-api.lib;$(OBS)\build\libobs\Debug\obs.lib;$(OBS)\build\deps\w32-pthreads\Debug\w32-pthreads.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>gdiplus.lib;$(OBS)\build\UI\frontend-plugins\frontend-tools\Debug\frontend-tools.lib;$(OBS)\build\UI\obs-frontend-api\Debug\obs-frontend-api.lib;$(OBS)\build\libobs\Debug\obs.lib;$(OBS)\build\deps\w32-pthreads\Debug\w32-pthreads.lib;$(OBS)\build\plugins\rtmp-services\Debug\rtmp-services.lib;E:\Dev\sdk\curl-7.67.0\build\lib\Debug\libcurl-d_imp.lib;Qt5Gui.lib;Qt5XmlPatterns.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(ProjectDir)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
@@ -115,12 +118,13 @@
     <ClInclude Include="source\gdiplus\GdiPlusOBS.h" />
     <ClInclude Include="source\obs-scorecard.h" />
     <ClInclude Include="source\common.h" />
+    <ClInclude Include="source\pluginmain.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\obs-simple-counter.cpp" />
     <ClCompile Include="source\gdiplus\GdiPlusOBS.cpp" />
-    <ClCompile Include="source\pluginmain.cpp" />
     <ClCompile Include="source\obs-scorecard.cpp" />
+    <ClCompile Include="source\pluginmain.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="data\locale\en-US.ini" />
@@ -130,4 +134,9 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties MocDir="$(ProjectDir)\source\ui\forms\moc" Qt5Version_x0020_x64="msvc2017_64" />
+    </VisualStudio>
+  </ProjectExtensions>
 </Project>

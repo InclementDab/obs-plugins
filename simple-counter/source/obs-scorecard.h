@@ -9,16 +9,16 @@
 #include "gdiplus/GdiPlusOBS.h"
 #include <spdlog/spdlog.h>
 
+#include <chrono>
+
 #define SCORECARD_ID "scorecard"
 #define SCORECARD_NAME "Scorecard"
 
 
 
-
+// todo Instead of having a Scorecard class, just have 'default setups' in the Counter class. which allows the user to select one of few default variable setups
 struct Scorecard : GdiPlusOBS
-{
-private: // Callbacks
-	
+{	
 	
 public: // Generic Data
 
@@ -41,6 +41,8 @@ public:
 	{
 		spdlog::warn("Scorecard");		
 		obs_source_update(source, data);
+
+		t1 = std::chrono::high_resolution_clock::now();
 	}
 
 	~Scorecard()
@@ -69,6 +71,10 @@ public:
 	void Update(obs_data_t* data);
 	void Tick(float seconds);
 	void Render(gs_effect_t* effects);
+
+	std::chrono::high_resolution_clock clock;
+	
+	
 };
 
 
